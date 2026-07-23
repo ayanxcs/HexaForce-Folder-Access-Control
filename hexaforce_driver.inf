@@ -1,0 +1,53 @@
+[Version]
+Signature        = "$Windows NT$"
+Class            = "ActivityMonitor"
+ClassGuid        = {b86dff51-a31e-4bac-b3bb-e408c9611a91}
+Provider         = %ManufacturerName%
+DriverVer        = 07/22/2026,3.0.0.0
+CatalogFile      = hexaforce_minifilter.cat
+
+[DestinationDirs]
+DefaultDestDir          = 12
+HexaForce.DriverFiles   = 12
+
+[DefaultInstall]
+OptionDesc          = %ServiceDescription%
+CopyFiles           = HexaForce.DriverFiles
+
+[DefaultInstall.Services]
+AddService          = %ServiceName%,,HexaForce.Service
+
+[DefaultUninstall]
+DelFiles            = HexaForce.DriverFiles
+
+[DefaultUninstall.Services]
+DelService          = %ServiceName%,0x200
+
+[HexaForce.Service]
+DisplayName      = %ServiceName%
+Description      = %ServiceDescription%
+ServiceBinary    = %12%\HexaForceDriver.sys
+Dependencies     = "FltMgr"
+ServiceType      = 2
+StartType        = 3
+ErrorControl     = 1
+LoadOrderGroup   = "FSFilter Activity Monitor"
+AddReg           = HexaForce.AddRegistry
+
+[HexaForce.AddRegistry]
+HKR,"SupportedFeatures",0x00010001,0x3
+HKR,"Instances","DefaultInstance",0x00000000,%DefaultInstance%
+HKR,"Instances\"%Instance1.Name%","Altitude",0x00000000,%Instance1.Altitude%
+HKR,"Instances\"%Instance1.Name%","Flags",0x00010001,%Instance1.Flags%
+
+[HexaForce.DriverFiles]
+HexaForceDriver.sys
+
+[Strings]
+ManufacturerName   = "HexaForce Security Systems"
+ServiceName        = "HexaForceMinifilter"
+ServiceDescription = "HexaForce Kernel File Access Control Minifilter Driver"
+DefaultInstance    = "HexaForce Minifilter Instance"
+Instance1.Name     = "HexaForce Minifilter Instance"
+Instance1.Altitude = "328010"
+Instance1.Flags    = 0x0
